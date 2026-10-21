@@ -41,76 +41,6 @@ if (!document.querySelector('meta[name="viewport"]')) {
   document.head.appendChild(viewport);
 }
 
-// Estilos responsivos
-const mobileStyles = document.createElement('style');
-
-mobileStyles.textContent = `
-  *, *::before, *::after {
-    box-sizing: border-box;
-  }
-
-  html {
-    -webkit-text-size-adjust: 100%;
-  }
-
-  body {
-    margin: 0;
-  }
-
-  #game, #menu {
-    width: 100%;
-    max-width: 100%;
-  }
-
-  #board {
-    display: block;
-    width: 100%;
-    max-width: 600px;
-    height: auto !important;
-    margin-inline: auto;
-    touch-action: none;
-    user-select: none;
-    -webkit-user-select: none;
-  }
-
-  [data-dir] {
-    min-width: 48px;
-    min-height: 48px;
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-    user-select: none;
-  }
-
-  button {
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  @media (max-width: 600px) {
-    body {
-      overflow-x: hidden;
-    }
-
-    #menu, #game {
-      padding-left: max(12px, env(safe-area-inset-left));
-      padding-right: max(12px, env(safe-area-inset-right));
-    }
-
-    #board {
-      width: 100% !important;
-      max-width: 600px;
-    }
-
-    [data-dir] {
-      min-width: 54px;
-      min-height: 54px;
-      font-size: 1.15rem;
-    }
-  }
-`;
-
-document.head.appendChild(mobileStyles);
-
 // =====================================
 // TELA CHEIA RESPONSIVA
 // =====================================
@@ -124,62 +54,7 @@ fullscreenBtn.setAttribute(
   'Ativar ou sair da tela cheia'
 );
 
-fullscreenBtn.style.cssText = [
-  'display:block',
-  'margin:8px auto',
-  'padding:10px 14px',
-  'border:0',
-  'border-radius:10px',
-  'font-weight:700',
-  'cursor:pointer',
-  'touch-action:manipulation',
-  'position:relative',
-  'z-index:20'
-].join(';');
-
 game.insertBefore(fullscreenBtn, game.firstChild);
-
-const fullscreenStyles = document.createElement('style');
-
-fullscreenStyles.textContent = `
-  #game:fullscreen, #game.fallback-fullscreen {
-    position: fixed !important; inset: 0 !important; z-index: 99999;
-    width: 100vw !important; height: 100dvh !important; max-width: none;
-    padding: 0 !important; border: 0; border-radius: 0; overflow: hidden;
-    background: #064d83;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .board-wrap {
-    position: absolute; border: 4px solid #51e1d2; border-radius: 14px;
-    box-shadow: 0 12px 40px #00152580;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) #board {
-    width: 100% !important; height: 100% !important; max-width: none !important;
-    aspect-ratio: auto !important; margin: 0 !important;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .game-head {
-    position: absolute; top: max(8px, env(safe-area-inset-top));
-    left: max(8px, env(safe-area-inset-left)); z-index: 2;
-    color: white; pointer-events: none; opacity: .85;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .game-head > div:first-child,
-  #game:is(:fullscreen, .fallback-fullscreen) .game-footer { display: none; }
-  #game:is(:fullscreen, .fallback-fullscreen) #pauseBtn { pointer-events: auto; }
-  #game:is(:fullscreen, .fallback-fullscreen) #fullscreenBtn {
-    position: absolute !important; top: max(8px, env(safe-area-inset-top));
-    right: max(8px, env(safe-area-inset-right)); margin: 0 !important; z-index: 3 !important;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .touch-controls {
-    display: flex; position: absolute; bottom: max(8px, env(safe-area-inset-bottom));
-    right: max(8px, env(safe-area-inset-right)); z-index: 3; margin: 0; opacity: .8;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .touch-controls button {
-    width: 48px; height: 44px; min-width: 44px; min-height: 44px;
-  }
-  #game:is(:fullscreen, .fallback-fullscreen) .overlay { z-index: 5; }
-  #game:is(:fullscreen, .fallback-fullscreen) .overlay-card { padding: 10px; }
-  body.game-fullscreen { overflow: hidden; }
-`;
-document.head.appendChild(fullscreenStyles);
 
 function isFullscreen() {
   return document.fullscreenElement === game || game.classList.contains('fallback-fullscreen');
@@ -1116,6 +991,9 @@ function startGame(options={}) {
 
   menu.classList.add('hidden');
   game.classList.remove('hidden');
+  document.body.classList.add('playing');
+  game.dataset.avatar = character;
+  game.dataset.difficulty = difficulty;
 
   score = 0;
   gameTime = 0;
@@ -1182,7 +1060,7 @@ function startGame(options={}) {
   scoreEl.textContent = score;
 
   document.getElementById('playingAs').textContent =
-    ({bob:'🧽 Bob Esponja',patrick:'⭐ Patrick',sandy:'🐿️ Sandy Bochechas'})[character];
+    ({bob:'Bob Esponja',patrick:'Patrick',sandy:'Sandy'})[character];
 
   document.getElementById('level').textContent =
     settings[difficulty].label;
@@ -1681,6 +1559,7 @@ function goMenu() {
   overlay.classList.add('hidden');
   game.classList.add('hidden');
   menu.classList.remove('hidden');
+  document.body.classList.remove('playing');
 
   pararMusica();
 }
@@ -1702,30 +1581,21 @@ function syncCanvasResolution() {
 }
 
 function fitFullscreenBoard() {
-  if (!isFullscreen()) { syncCanvasResolution(); return; }
-  const bounds = game.getBoundingClientRect();
-  const pad = directionPad.getBoundingClientRect();
-  const status = document.querySelector('.status-bar').getBoundingClientRect();
-  const header = document.querySelector('.game-head').getBoundingClientRect();
-  const sidePad = pad.width > 0 && bounds.width > bounds.height && bounds.height <= 500;
-  const top = Math.max(header.bottom-bounds.top+12, sidePad ? 72 : status.bottom-bounds.top+12);
-  const portable = matchMedia('(max-width:900px), (pointer:coarse)').matches;
-  const margin = portable ? 4 : 14;
-  const availableWidth = bounds.width - (sidePad ? pad.width+36 : margin*2);
-  let bottom = pad.height && !sidePad ? pad.top-bounds.top-18 : bounds.height-18;
-  if(gameMode==='battle' && !pad.height) bottom=Math.min(bottom,document.getElementById('abilityBtn').getBoundingClientRect().top-bounds.top-16);
-  const availableHeight = Math.max(80,bottom-top);
+  // Fit the original grid inside its own layout area in both normal and fullscreen mode.
+  // Border space is excluded so every gameplay cell stays square after rotation.
+  if (game.classList.contains('hidden')) return;
+  const stage = document.querySelector('.board-stage');
   const frame = document.querySelector('.board-wrap');
   const style = getComputedStyle(frame);
-  const borderX = parseFloat(style.borderLeftWidth)+parseFloat(style.borderRightWidth);
-  const borderY = parseFloat(style.borderTopWidth)+parseFloat(style.borderBottomWidth);
-  const width = Math.min(availableWidth, (availableHeight-borderY)*COLS/ROWS+borderX);
-  const height = (width-borderX)*ROWS/COLS+borderY;
-  game.style.setProperty('--map-width',`${width}px`);
-  game.style.setProperty('--map-height',`${height}px`);
-  game.style.setProperty('--map-left',`${margin+(availableWidth-width)/2}px`);
-  game.style.setProperty('--map-top',`${top+(availableHeight-height)/2}px`);
+  const borderX = parseFloat(style.borderLeftWidth) + parseFloat(style.borderRightWidth);
+  const borderY = parseFloat(style.borderTopWidth) + parseFloat(style.borderBottomWidth);
+  const availableWidth = Math.max(1, stage.clientWidth - borderX);
+  const availableHeight = Math.max(1, stage.clientHeight - borderY);
+  const width = Math.min(availableWidth, availableHeight * COLS / ROWS);
+  frame.style.width = `${width + borderX}px`;
+  frame.style.height = `${width * ROWS / COLS + borderY}px`;
   syncCanvasResolution();
+  if (padPointer !== null) measurePadHitAreas();
 }
 
 function interpolateCell(from, to, alpha) {
@@ -2312,6 +2182,7 @@ function roundRect(x, y, w, h, r) {
 // =====================================
 
 const layoutObserver = new ResizeObserver(fitFullscreenBoard);
+layoutObserver.observe(document.querySelector('.board-stage'));
 layoutObserver.observe(game);
 layoutObserver.observe(document.querySelector('.status-bar'));
 layoutObserver.observe(directionPad);

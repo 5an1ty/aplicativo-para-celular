@@ -2,14 +2,14 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Bob Esponja Snake</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <main class="app">
     <header class="topbar">
-      <div class="brand"><span class="bubble">✦</span><div><p class="eyebrow">FENDA DO BIQUÍNI</p><h1>BOB ESPONJA <span>SNAKE</span></h1></div></div>
+      <div class="brand"><div><p class="eyebrow">FENDA DO BIQUÍNI</p><h1>BOB ESPONJA<span>SNAKE</span></h1></div><svg class="art brand-star" aria-hidden="true"><use href="assets/icons.svg#star"></use></svg></div>
       <div class="best"><span id="bestLabel">🏆 Recorde</span> <strong id="best">0</strong></div>
     </header>
 
@@ -17,7 +17,7 @@
       <div class="intro">
         <div class="sun-rays"></div>
         <p class="eyebrow">UMA AVENTURA SUBMARINA</p>
-        <h2>Preparado para<br><span>mergulhar?</span></h2>
+        <h2>Preparado para mergulhar?</h2>
         <p>Coma hambúrgueres, cresça e desvie dos obstáculos!</p>
         <div class="sea-icons" aria-hidden="true">🫧　🪸　🐚　🫧</div>
       </div>
@@ -25,27 +25,27 @@
         <h3>1. Escolha seu personagem</h3>
         <div class="character-options">
           <button class="character selected" data-character="bob" aria-pressed="true">
-            <span class="avatar bob">🧽</span><strong>Bob Esponja</strong><small>O otimista da Fenda</small>
+            <span class="avatar bob"><svg class="art " aria-hidden="true"><use href="assets/icons.svg#sponge"></use></svg></span><strong>Bob Esponja</strong><small>O otimista da Fenda</small>
           </button>
           <button class="character" data-character="patrick" aria-pressed="false">
-            <span class="avatar patrick">⭐</span><strong>Patrick</strong><small>O amigo estrela-do-mar</small>
+            <span class="avatar patrick"><svg class="art " aria-hidden="true"><use href="assets/icons.svg#star"></use></svg></span><strong>Patrick</strong><small>O amigo estrela-do-mar</small>
           </button>
-          <button class="character" data-character="sandy" aria-pressed="false" hidden><span class="avatar">🐿️</span><strong>Sandy Bochechas</strong><small>Karate</small></button>
+          <button class="character" data-character="sandy" aria-pressed="false" hidden><span class="avatar sandy"><svg class="art " aria-hidden="true"><use href="assets/icons.svg#sandy"></use></svg></span><strong>Sandy Bochechas</strong><small>Karate</small></button>
         </div>
         <h3>2. Escolha o modo</h3>
         <div class="mode-options">
-          <button class="mode-choice selected" data-mode="classic" aria-pressed="true"><strong>🌊 Clássico</strong><small>Explore e enfrente Plankton a cada 200 pontos</small></button>
-          <button class="mode-choice" data-mode="battle" aria-pressed="false"><strong>⚔ Batalha</strong><small>Ondas de inimigos cada vez mais agressivos</small></button>
+          <button class="mode-choice selected" data-mode="classic" aria-pressed="true"><svg class="art " aria-hidden="true"><use href="assets/icons.svg#wave"></use></svg><strong>Clássico</strong><small>Explore e enfrente Plankton a cada 200 pontos</small></button>
+          <button class="mode-choice" data-mode="battle" aria-pressed="false"><svg class="art " aria-hidden="true"><use href="assets/icons.svg#swords"></use></svg><strong>Batalha</strong><small>Ondas de inimigos cada vez mais agressivos</small></button>
         </div>
         <h3>3. Escolha a dificuldade</h3>
         <div class="difficulty-options">
-          <button class="difficulty selected" data-difficulty="easy" aria-pressed="true"><span>🐚</span><div><strong>Fácil</strong><small>Mais lento · Poucos obstáculos</small></div><i>✓</i></button>
+          <button class="difficulty selected" data-difficulty="easy" aria-pressed="true"><span><svg class="art " aria-hidden="true"><use href="assets/icons.svg#shell"></use></svg></span><div><strong>Fácil</strong><small>Mais lento · Poucos obstáculos</small></div><i>✓</i></button>
           <button id="tutorialDifficultyBtn" class="difficulty tutorial-entry hidden" type="button"><span>🎓</span><div><strong>Tutorial modo batalha</strong><small>Treino guiado com Bob · sem perder vidas</small></div><i>✓</i></button>
-          <button class="difficulty" data-difficulty="medium" aria-pressed="false"><span>🪸</span><div><strong>Médio</strong><small>Velocidade moderada · Mais obstáculos</small></div><i>✓</i></button>
-          <button class="difficulty" data-difficulty="hard" aria-pressed="false"><span>🌋</span><div><strong>Difícil</strong><small>Mais rápido · Muitos obstáculos</small></div><i>✓</i></button>
+          <button class="difficulty" data-difficulty="medium" aria-pressed="false"><span><svg class="art " aria-hidden="true"><use href="assets/icons.svg#coral"></use></svg></span><div><strong>Médio</strong><small>Velocidade moderada · Mais obstáculos</small></div><i>✓</i></button>
+          <button class="difficulty" data-difficulty="hard" aria-pressed="false"><span><svg class="art " aria-hidden="true"><use href="assets/icons.svg#volcano"></use></svg></span><div><strong>Difícil</strong><small>Mais rápido · Muitos obstáculos</small></div><i>✓</i></button>
         </div>
-        <button id="startBtn" class="primary">▶ COMEÇAR A JOGAR</button>
-        <button id="howBtn" class="text-button" aria-expanded="false" aria-controls="howText">Como jogar?</button>
+        <button id="startBtn" class="primary">COMEÇAR A JOGAR</button>
+        <button id="howBtn" class="text-button" aria-expanded="false" aria-controls="howText">⚙ Como jogar?</button>
         <button id="tutorialMenuBtn" class="text-button hidden" type="button" aria-expanded="false" aria-controls="tutorialPreview">Tutorial modo batalha</button>
         <section id="tutorialPreview" class="how-text hidden" aria-label="Tutorial ilustrado da Batalha"><div id="tutorialCards"></div><button id="startTutorialBtn" class="primary" type="button">COMEÇAR TUTORIAL JOGÁVEL</button></section>
         <div id="howText" class="how-text hidden">
@@ -68,31 +68,33 @@
     </section>
 
     <section id="game" class="panel game-panel hidden">
+      <div class="game-logo" aria-hidden="true"><span>FENDA DO BIQUÍNI</span><strong>BOB ESPONJA <b>SNAKE</b></strong></div>
       <div class="game-head">
-        <div><p class="eyebrow">PERSONAGEM</p><strong id="playingAs">Bob Esponja</strong></div>
-        <div class="stat"><small>PONTUAÇÃO</small><strong id="score">0</strong></div>
-        <div class="stat"><small>DIFICULDADE</small><strong id="level">Fácil</strong></div>
+        <div class="player-plaque"><span class="player-portrait"><svg class="art portrait-bob" aria-hidden="true"><use href="assets/icons.svg#sponge"></use></svg><svg class="art portrait-patrick" aria-hidden="true"><use href="assets/icons.svg#star"></use></svg><svg class="art portrait-sandy" aria-hidden="true"><use href="assets/icons.svg#sandy"></use></svg></span><strong id="playingAs">Bob Esponja</strong></div>
+        <div class="stat score-medal"><small>Pontos</small><strong id="score">0</strong></div>
+        <div class="stat difficulty-badge"><small>Dificuldade</small><span class="level-art"><svg class="art level-easy" aria-hidden="true"><use href="assets/icons.svg#shell"></use></svg><svg class="art level-medium" aria-hidden="true"><use href="assets/icons.svg#coral"></use></svg><svg class="art level-hard" aria-hidden="true"><use href="assets/icons.svg#volcano"></use></svg></span><strong id="level">Fácil</strong></div>
         <div class="game-actions"><button id="headerMenuBtn" class="menu-return" type="button">Voltar ao menu</button><button id="pauseBtn" class="small-button" aria-label="Pausar jogo">II</button></div>
       </div>
       <div class="status-bar">
         <span id="foodHint" class="food-hint" role="status"></span>
         <span class="boss-panel"><span id="bossStatus" role="status"></span><progress id="bossHealth" max="3" value="3" aria-label="Vida do Plankton" hidden></progress></span>
       </div>
-      <div class="board-wrap">
+      <div class="board-stage"><div class="board-wrap">
         <span id="powerStatus" class="power-hud" data-corner="top-left" role="status" hidden></span>
         <span id="trainingObjective" class="training-objective" hidden></span>
         <span id="abilityKeyHint" class="ability-key-hint" hidden>pressione C</span>
         <canvas id="board" width="600" height="420" aria-label="Tabuleiro do jogo Snake"></canvas>
         <div id="overlay" class="overlay hidden"><div class="overlay-card"><div id="overlayIcon" class="overlay-icon">⏸️</div><h2 id="overlayTitle">Jogo pausado</h2><div class="pause-start-actions"><button id="pauseFullscreenBtn" class="secondary" type="button">⛶ Tela cheia</button><button id="resumeBtn" class="primary">CONTINUAR</button></div><div id="overlayText">Respire fundo, mergulhador!</div><div class="audio-controls" role="group" aria-label="Controles de áudio"><button id="muteMusicBtn" class="audio-toggle" type="button" aria-pressed="false">🔇 Silenciar música</button><button id="muteEffectsBtn" class="audio-toggle" type="button" aria-pressed="false">🔇 Silenciar sons</button><button id="muteAllBtn" class="audio-toggle" type="button" aria-pressed="false">🔇 Silenciar tudo</button></div><button id="restartBtn" class="secondary">RECOMEÇAR</button><button id="menuBtn" class="text-button">Voltar ao menu</button></div></div>
       </div>
-      <div class="game-footer"><span>🍔 Hambúrguer = +10 pontos</span><span>Bordas livres ↔ ↕ · Esc = pausar</span></div>
+      </div>
+      <div class="game-footer"><span>🍔 Hambúrguer = +10 pontos</span><span>Bordas livres ↔ ↕</span></div>
       <button id="abilityBtn" class="secondary" type="button" hidden>Power · Pronto</button>
       <div class="touch-controls" aria-label="Controles direcionais">
-        <button data-dir="up" aria-label="Cima">▲</button>
-        <div><button data-dir="left" aria-label="Esquerda">◀︎</button><button data-dir="down" aria-label="Baixo">▼</button><button data-dir="right" aria-label="Direita">▶︎</button></div>
+        <button data-dir="up" aria-label="Cima"><svg class="art" aria-hidden="true"><use href="assets/icons.svg#arrow"></use></svg></button>
+        <div><button data-dir="left" aria-label="Esquerda"><svg class="art" aria-hidden="true"><use href="assets/icons.svg#arrow"></use></svg></button><button data-dir="down" aria-label="Baixo"><svg class="art" aria-hidden="true"><use href="assets/icons.svg#arrow"></use></svg></button><button data-dir="right" aria-label="Direita"><svg class="art" aria-hidden="true"><use href="assets/icons.svg#arrow"></use></svg></button></div>
       </div>
     </section>
-    <footer>🌊 Feito para se divertir no fundo do mar <span>•</span> HTML · CSS · JavaScript</footer>
+    <footer>Feito para se divertir no fundo do mar</footer>
   </main>
   <script src="script.js"></script>
   <script src="tutorial.js"></script>

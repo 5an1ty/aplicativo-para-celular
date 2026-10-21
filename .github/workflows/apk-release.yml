@@ -29,16 +29,21 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          tag="android-v1.0.0"
+          tag="android-v1.1.0"
           cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
           ## Instalação Android
           Em Assets, toque em Bob-Esponja-Snake.apk para baixar o arquivo (aproximadamente 16 MB). Este anexo usa o serviço de downloads de releases do GitHub.
 
           Android 6.0 ou superior, com Android System WebView atualizado. Jogo e músicas incluídos para uso offline.
 
-          **Aviso de validação:** foi relatada a detecção Trojan:Script/Ulthar.A!ml pelo Microsoft Defender nos arquivos JavaScript deste APK. A causa ainda não foi esclarecida. Esta release muda apenas a forma de entrega: é o mesmo APK, sem correção ou liberação antimalware. Não desative proteções nem ignore alertas para instalar.
+          ## Novidades na versão 1.1
+          Novo visual inspirado em jogo mobile: fundo submarino, painéis de madeira, seleção de personagem ilustrada, botões com relevo e direcional maior. Layout próprio para celular em pé ou deitado. Fontes e ilustrações incluídas para uso offline. Regras, pontuação, poderes e inimigos preservados.
+
+          Validação: Chromium em seis tamanhos de tela; movimento, pontuação por dificuldade, poderes, pausa, tela cheia, tutorial e habilidade de batalha. Conteúdo do APK testado offline, incluindo áudio. Assinatura e alinhamento do APK verificados. Mesma chave da versão 1.0, com versionCode incrementado para permitir atualização. Sem teste em aparelho físico ou emulador Android nesta máquina.
+
+          **Aviso de validação:** a detecção Trojan:Script/Ulthar.A!ml relatada no APK 1.0 pelo Microsoft Defender segue sem diagnóstico conclusivo. Esta atualização visual não foi validada pelo Defender e não deve ser tratada como correção do alerta. Não desative proteções nem ignore alertas para instalar.
           NOTES
           if ! gh release view "$tag" >/dev/null 2>&1; then
-            gh release create "$tag" --target "$GITHUB_SHA" --title 'Bob Esponja Snake — APK Android 1.0' --notes-file "$RUNNER_TEMP/release-notes.md"
+            gh release create "$tag" --target "$GITHUB_SHA" --title 'Bob Esponja Snake — APK Android 1.1' --notes-file "$RUNNER_TEMP/release-notes.md"
           fi
           gh release upload "$tag" downloads/Bob-Esponja-Snake.apk downloads/Bob-Esponja-Snake.apk.sha256 --clobber
