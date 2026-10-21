@@ -1,0 +1,44 @@
+name: Publish Android APK download
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/apk-release.yml'
+      - 'downloads/Bob-Esponja-Snake.apk'
+      - 'downloads/Bob-Esponja-Snake.apk.sha256'
+permissions:
+  contents: write
+concurrency:
+  group: android-apk-release
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Verify exact APK before publishing
+        run: sha256sum --check downloads/Bob-Esponja-Snake.apk.sha256
+      - name: Publish downloadable APK attachment
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag="android-v1.0.0"
+          cat > "$RUNNER_TEMP/release-notes.md" <<'NOTES'
+          ## Instalação Android
+          Em Assets, toque em Bob-Esponja-Snake.apk para baixar o arquivo (aproximadamente 16 MB). Este anexo usa o serviço de downloads de releases do GitHub.
+
+          Android 6.0 ou superior, com Android System WebView atualizado. Jogo e músicas incluídos para uso offline.
+
+          **Aviso de validação:** foi relatada a detecção Trojan:Script/Ulthar.A!ml pelo Microsoft Defender nos arquivos JavaScript deste APK. A causa ainda não foi esclarecida. Esta release muda apenas a forma de entrega: é o mesmo APK, sem correção ou liberação antimalware. Não desative proteções nem ignore alertas para instalar.
+          NOTES
+          if ! gh release view "$tag" >/dev/null 2>&1; then
+            gh release create "$tag" --target "$GITHUB_SHA" --title 'Bob Esponja Snake — APK Android 1.0' --notes-file "$RUNNER_TEMP/release-notes.md"
+          fi
+          gh release upload "$tag" downloads/Bob-Esponja-Snake.apk downloads/Bob-Esponja-Snake.apk.sha256 --clobber
