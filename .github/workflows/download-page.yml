@@ -1,0 +1,40 @@
+name: Publish plain download page
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'download/index.html'
+      - '.github/workflows/download-page.yml'
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+concurrency:
+  group: download-pages
+  cancel-in-progress: false
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}download/
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - name: Prepare the plain HTML site
+        run: |
+          mkdir -p "$RUNNER_TEMP/download-site/download"
+          cp download/index.html "$RUNNER_TEMP/download-site/download/index.html"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: ${{ runner.temp }}/download-site
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
